@@ -13,18 +13,19 @@
     </div>
     
     <div>
-        @if (OverlayService.CurrentOverlayPanel == OverlayService.OverlayPanel.FontSettings)
+        @switch(OverlayService.CurrentOverlayPanel)
         {
-            <TextSettings/>
+            case OverlayService.OverlayPanel.FontSettings:
+                <TextSettings/>
+                break;
+            case OverlayService.OverlayPanel.PageSettings:
+                <PageSettings/>
+                break;
+            case OverlayService.OverlayPanel.TemperatureSettings:
+                <ColorTemperatureSettings/>
+                break;
         }
-        @if (OverlayService.CurrentOverlayPanel == OverlayService.OverlayPanel.PageSettings)
-        {
-            <PageSettings/>
-        }
-        @if (OverlayService.CurrentOverlayPanel == OverlayService.OverlayPanel.TemperatureSettings)
-        {
-            <ColorTemperatureSettings/>
-        }
+        
         <div class="border-solid border-t-2 w-full border-black bg-white" @onclick:stopPropagation="true">
             @if (!IsTocEmpty)
             {
@@ -47,6 +48,13 @@
                 }
                 <span class="flex-1">@ChapterTitle</span>
                 <div class="flex items-center">
+                    <Button>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-note">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M13 20l7 -7" />
+                            <path d="M13 20v-6a1 1 0 0 1 1 -1h6v-7a2 2 0 0 0 -2 -2h-12a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7" />
+                        </svg>
+                    </Button>
                     <Button OnClick="@(() => OverlayService.TogglePanel(OverlayService.OverlayPanel.TemperatureSettings))">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-contrast"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 3.34a10 10 0 1 1 -15 8.66l.005 -.324a10 10 0 0 1 14.995 -8.336m-9 1.732a8 8 0 0 0 4.001 14.928l-.001 -16a8 8 0 0 0 -4 1.072"/></svg>
                     </Button>
