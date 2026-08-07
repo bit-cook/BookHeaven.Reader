@@ -63,7 +63,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v6
       with:
-        dotnet-version: 10.0.x
+        dotnet-version: 10.x
         source-url: https://nuget.pkg.github.com/BookHeaven/index.json
       env:
         NUGET_AUTH_TOKEN: ${{ secrets.PAT_TOKEN }}
@@ -127,3 +127,12 @@ jobs:
         files: |
             ./bin/Release/${{ env.DOTNET_ANDROID_VERSION }}/publish/dev.ggarrido.bookheaven-Signed.apk
             ./bin/Release/${{ env.DOTNET_ANDROID_VERSION }}/publish/dev.ggarrido.bookheaven-Signed.aab
+          
+    - name: Publish to Google Play
+      uses: r0adkll/upload-google-play@v1
+      with:
+        serviceAccountJson: ${{ secrets.PLAY_STORE_JSON }}
+        packageName: dev.ggarrido.bookheaven
+        releaseFile: ./bin/Release/${{ env.DOTNET_ANDROID_VERSION }}/publish/dev.ggarrido.bookheaven-Signed.aab
+        track: internal
+        status: completed
