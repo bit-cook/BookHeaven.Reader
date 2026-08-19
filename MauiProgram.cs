@@ -16,7 +16,7 @@ public static class MauiProgram
 			.UseMauiApp<App>()
 			.UseMauiCommunityToolkit();
 
-		builder.Services.AddDomain(options =>
+		builder.Services.AddCore(options =>
 		{
 			options.BooksPath = Path.Combine(FileSystem.AppDataDirectory, "books");
 			options.CoversPath = Path.Combine(FileSystem.AppDataDirectory, "covers");
@@ -50,6 +50,8 @@ public static class MauiProgram
 #endif
 		
 		var app = builder.Build();
+
+		app.Services.ApplyDatabaseMigrations();
 
 		using (var scope = app.Services.CreateScope())
 		{
