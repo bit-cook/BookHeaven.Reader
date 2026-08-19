@@ -1,4 +1,4 @@
-using BookHeaven.Domain.Features.Books;
+using BookHeaven.Core.Features.Books;
 using Microsoft.AspNetCore.Components;
 
 namespace BookHeaven.Reader.Components.Pages.Remote;

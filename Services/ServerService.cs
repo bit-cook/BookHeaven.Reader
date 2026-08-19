@@ -1,13 +1,13 @@
 ﻿using System.Net.Http.Json;
-using BookHeaven.Domain;
+using BookHeaven.Core;
 using Microsoft.Extensions.Logging;
-using BookHeaven.Domain.Features.Books;
-using BookHeaven.Domain.Features.BooksProgress;
-using BookHeaven.Domain.Features.Fonts;
-using BookHeaven.Domain.Features.Profiles;
-using BookHeaven.Domain.Features.ProfileSettingss;
-using BookHeaven.Domain.Shared;
-using Font = BookHeaven.Domain.Entities.Font;
+using BookHeaven.Core.Features.Books;
+using BookHeaven.Core.Features.BooksProgress;
+using BookHeaven.Core.Features.Fonts;
+using BookHeaven.Core.Features.Profiles;
+using BookHeaven.Core.Features.ProfileSettingss;
+using BookHeaven.Core.Shared;
+using Font = BookHeaven.Core.Entities.Font;
 
 namespace BookHeaven.Reader.Services;
 
@@ -147,7 +147,7 @@ public class ServerService(
 			if (getBook.IsSuccess)
 			{
 				//If the book is already downloaded, we remove the local cache
-				Directory.EnumerateFiles(DomainGlobals.BooksPath).Where(f => f.StartsWith(book.BookId.ToString())).ToList().ForEach(File.Delete);
+				Directory.EnumerateFiles(CoreGlobals.BooksPath).Where(f => f.StartsWith(book.BookId.ToString())).ToList().ForEach(File.Delete);
 				saveBook = await sender.Send(new UpdateBook.Command(book, coverUrl.ToString(), epubUrl.ToString()));
 			}
 			else

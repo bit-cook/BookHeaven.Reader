@@ -24,7 +24,7 @@
         <div class="flex items-center justify-between gap-2">
             <RadioButtonGroup @bind-SelectedOption="_selectedBookStatus" @bind-SelectedOption:after="FilterBooks">
                 <RadioButton Option="@BookStatus.Missing" Label="@Translations.BY_MISSING" />
-                <RadioButton Option="@BookStatus.All" Label="@Domain.Localization.Translations.ALL_M"/>
+                <RadioButton Option="@BookStatus.All" Label="@Core.Localization.Translations.ALL_M"/>
             </RadioButtonGroup>
              <SearchBar @bind-Filter="_filter" @bind-Filter:after="FilterBooks" />
         </div>

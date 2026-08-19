@@ -1,6 +1,6 @@
 ﻿using BlazorPanzoom;
-using BookHeaven.Domain;
-using BookHeaven.Domain.Abstractions;
+using BookHeaven.Core;
+using BookHeaven.Core.Abstractions;
 using CommunityToolkit.Maui;
 using BookHeaven.EbookManager;
 

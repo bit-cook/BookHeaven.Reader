@@ -1,8 +1,8 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using BookHeaven.Domain.Constants;
-using BookHeaven.Domain.Shared;
+using BookHeaven.Core.Constants;
+using BookHeaven.Core.Shared;
 #if ANDROID31_0_OR_GREATER
 using Android.App;
 using Android.Content;

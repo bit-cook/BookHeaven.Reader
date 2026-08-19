@@ -1,5 +1,5 @@
-using BookHeaven.Domain.Features.Books;
-using BookHeaven.Domain.Features.BooksProgress;
+using BookHeaven.Core.Features.Books;
+using BookHeaven.Core.Features.BooksProgress;
 using BookHeaven.EbookManager;
 using BookHeaven.EbookManager.Abstractions;
 using BookHeaven.EbookManager.Entities;

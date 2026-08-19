@@ -1,7 +1,7 @@
-using BookHeaven.Domain.Abstractions;
-using BookHeaven.Domain.Enums;
-using BookHeaven.Domain.Features.Books;
-using BookHeaven.Domain.Services;
+using BookHeaven.Core.Abstractions;
+using BookHeaven.Core.Enums;
+using BookHeaven.Core.Features.Books;
+using BookHeaven.Core.Services;
 using Microsoft.AspNetCore.Components;
 
 namespace BookHeaven.Reader.Components.Pages.Books;
@@ -56,7 +56,7 @@ public partial class Books
             return;
         }
         
-        await AlertService.ShowToastAsync(Domain.Localization.Translations.BOOK_DELETED);
+        await AlertService.ShowToastAsync(Core.Localization.Translations.BOOK_DELETED);
         BookManager.RemoveBook(bookId);
     }
 }

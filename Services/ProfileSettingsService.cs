@@ -1,4 +1,4 @@
-﻿using BookHeaven.Domain.Features.ProfileSettingss;
+﻿using BookHeaven.Core.Features.ProfileSettingss;
 
 namespace BookHeaven.Reader.Services;
 

@@ -1,4 +1,4 @@
-using BookHeaven.Domain.Features.ProfileSettingss;
+using BookHeaven.Core.Features.ProfileSettingss;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using Microsoft.AspNetCore.Components;

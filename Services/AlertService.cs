@@ -1,5 +1,5 @@
-﻿using BookHeaven.Domain.Abstractions;
-using BookHeaven.Domain.Enums;
+﻿using BookHeaven.Core.Abstractions;
+using BookHeaven.Core.Enums;
 using CommunityToolkit.Maui.Alerts;
 
 namespace BookHeaven.Reader.Services;
