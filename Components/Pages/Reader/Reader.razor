@@ -151,7 +151,7 @@
 	CurrentChapterId="@Current?.Identifier"/>
 
 
-<div class="flex h-screen flex-col">
+<div class="flex h-screen flex-col @(_bookLoading ? "invisible" : "")">
 	<div id="viewer" class="flex-1 overflow-hidden">
 		<div class="chapter current">
 			@if (Current?.IsContentProcessed == true)

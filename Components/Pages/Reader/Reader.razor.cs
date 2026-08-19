@@ -71,7 +71,7 @@ public partial class Reader : IAsyncDisposable
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (!_bookLoading && _refreshTotalPages)
+        if (_refreshTotalPages)
         {
             await UpdateTotalPages();
         }
@@ -119,17 +119,11 @@ public partial class Reader : IAsyncDisposable
             }
             
             await LoadEbook();
-            if (_bookProgress.ElapsedTime != TimeSpan.Zero)
-            {
-                ReaderService.SetTotalPages(_bookProgress.PageCount, _bookProgress.PageCountPrev, _bookProgress.PageCountNext);
-                ReaderService.NavigateTo(_bookProgress.Page, _bookProgress.Chapter);
-                
-            }
-            else
-            {
-                _bookProgress.StartDate = DateTimeOffset.Now;
-                ReaderService.NavigateTo(0,0);
-            }
+            ReaderService.NavigateTo(0, _bookProgress.Chapter);
+        }
+        if(_bookLoading && ReaderService.TotalPages > 0)
+        {
+            NavigateToInitialPage();
             _bookLoading = false;
         }
     }
@@ -153,7 +147,7 @@ public partial class Reader : IAsyncDisposable
     
     private async void OnDestroy()
     {
-        await UpdateProgress();
+        await SaveProgress();
     }
 
     private async Task LoadEbook()
@@ -237,17 +231,28 @@ public partial class Reader : IAsyncDisposable
         ReaderService.SetTotalPages(pagesArray[1], pagesArray[0], pagesArray[2]);
     }
 
+    private void NavigateToInitialPage()
+    {
+        var targetPage = 0;
 
-    private async Task UpdateProgress()
+        if (_bookProgress.ChapterProgress > 0)
+        {
+            targetPage = (int)Math.Round(_bookProgress.ChapterProgress * ReaderService.TotalPages);
+        }
+        targetPage = Math.Clamp(targetPage, 0, ReaderService.TotalPages);
+        
+        _bookProgress.StartDate ??= DateTimeOffset.Now;
+        ReaderService.NavigateTo(targetPage, _bookProgress.Chapter);
+    }
+
+
+    private async Task SaveProgress()
     {
         if (ReaderService.TotalPages == -1) return;
         
         _bookProgress.Chapter = ReaderService.CurrentChapter;
-        _bookProgress.Page = ReaderService.CurrentPage;
+        _bookProgress.ChapterProgress = ReaderService.CurrentPage / (double)ReaderService.TotalPages;
         _bookProgress.BookWordCount = _totalWeight;
-        _bookProgress.PageCount = ReaderService.TotalPages;
-        _bookProgress.PageCountPrev = ReaderService.TotalPagesPrev;
-        _bookProgress.PageCountNext = ReaderService.TotalPagesNext;
 
         if (_bookProgress.EndDate is null)
         {
@@ -277,7 +282,7 @@ public partial class Reader : IAsyncDisposable
             LifeCycleService.Paused -= OnPaused;
             LifeCycleService.Destroyed -= OnDestroy;
         }
-        await UpdateProgress();
+        await SaveProgress();
         await _module.InvokeVoidAsync("Dispose");
         await _module.DisposeAsync();
         _dotNetReference.Dispose();

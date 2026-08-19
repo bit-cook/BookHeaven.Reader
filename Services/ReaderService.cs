@@ -41,20 +41,19 @@ public class ReaderService
         {
             CurrentPage++;
             OnPageChanged?.Invoke();
+            return;
         }
-        else
-        {
-            if(CurrentChapter == TotalChapters - 1) return;
+        
+        if(CurrentChapter == TotalChapters - 1) return;
             
-            TotalPagesPrev = TotalPages;
-            TotalPages = TotalPagesNext;
-            TotalPagesNext = -1;
+        TotalPagesPrev = TotalPages;
+        TotalPages = TotalPagesNext;
+        TotalPagesNext = -1;
             
-            CurrentPage = 0;
-            CurrentChapter++;
-            OnChapterChanged?.Invoke();
-            OnTotalPagesChanged?.Invoke();
-        }
+        CurrentPage = 0;
+        CurrentChapter++;
+        OnChapterChanged?.Invoke();
+        OnTotalPagesChanged?.Invoke();
     }
     
     public void PreviousPage()
@@ -63,20 +62,19 @@ public class ReaderService
         {
             CurrentPage--;
             OnPageChanged?.Invoke();
+            return;
         }
-        else
-        {
-            if(CurrentChapter == 0) return;
+        
+        if(CurrentChapter == 0) return;
             
-            TotalPagesNext = TotalPages;
-            TotalPages = TotalPagesPrev;
-            TotalPagesPrev = -1;
+        TotalPagesNext = TotalPages;
+        TotalPages = TotalPagesPrev;
+        TotalPagesPrev = -1;
             
-            CurrentPage = TotalPages;
-            CurrentChapter--;
-            OnChapterChanged?.Invoke();
-            OnTotalPagesChanged?.Invoke();
-        }
+        CurrentPage = TotalPages;
+        CurrentChapter--;
+        OnChapterChanged?.Invoke();
+        OnTotalPagesChanged?.Invoke();
     }
 
     public void NextChapter()
