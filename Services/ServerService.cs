@@ -121,7 +121,7 @@ public class ServerService(
 
 	public async Task<Result<BookProgress?>> GetBookProgress(Guid profileId, Guid bookId)
 	{
-		var endpoint = $"api/profiles/{profileId}/{bookId}";
+		var endpoint = $"api/progress/{profileId}/{bookId}";
 		try
 		{
 			var response = await _httpClient.GetFromJsonAsync<BookProgress>(endpoint);
