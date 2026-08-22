@@ -1,4 +1,4 @@
-﻿<div class="flex items-center w-[250px] bg-white border-2 border-black rounded-full" @onclick:stopPropagation="true" @onclick:preventDefault="true">
+﻿<div class="flex items-center w-[250px] bg-white border-2 border-neutral-700 rounded-full" @onclick:stopPropagation="true" @onclick:preventDefault="true">
 	<input tabindex="0" @bind="Filter" @bind:event="oninput" @bind:after="() => FilterChanged.InvokeAsync(Filter)" class="bg-transparent w-full ps-5 py-2 outline-none" placeholder="Search books" type="text" />
 	@if (!string.IsNullOrEmpty(Filter))
 	{
