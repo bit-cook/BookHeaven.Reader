@@ -4,7 +4,7 @@ public class ReaderService
 {
     public int CurrentChapter { get; private set; }
     public int CurrentPage { get; private set; }
-    public int TotalPages { get; private set; }
+    public int TotalPages { get; private set; } = -1;
     public int TotalPagesPrev { get; private set; }
     public int TotalPagesNext { get; private set; }
     public int TotalChapters { get; set; }
