@@ -4,9 +4,9 @@ public class ReaderService
 {
     public int CurrentChapter { get; private set; }
     public int CurrentPage { get; private set; }
-    public int TotalPages { get; private set; } = -1;
-    public int TotalPagesPrev { get; private set; }
-    public int TotalPagesNext { get; private set; }
+    public int TotalPages { get; private set; }
+    private int TotalPagesPrev { get; set; }
+    private int TotalPagesNext { get; set; }
     public int TotalChapters { get; set; }
     
     public Action? OnPageChanged { get; set; }
@@ -48,9 +48,9 @@ public class ReaderService
             
         TotalPagesPrev = TotalPages;
         TotalPages = TotalPagesNext;
-        TotalPagesNext = -1;
+        TotalPagesNext = 0;
             
-        CurrentPage = 0;
+        CurrentPage = 1;
         CurrentChapter++;
         OnChapterChanged?.Invoke();
         OnTotalPagesChanged?.Invoke();
@@ -58,7 +58,7 @@ public class ReaderService
     
     public void PreviousPage()
     {
-        if (CurrentPage > 0)
+        if (CurrentPage > 1)
         {
             CurrentPage--;
             OnPageChanged?.Invoke();
@@ -69,7 +69,7 @@ public class ReaderService
             
         TotalPagesNext = TotalPages;
         TotalPages = TotalPagesPrev;
-        TotalPagesPrev = -1;
+        TotalPagesPrev = 0;
             
         CurrentPage = TotalPages;
         CurrentChapter--;
@@ -81,7 +81,7 @@ public class ReaderService
     {
         if (CurrentChapter >= TotalChapters - 1) return;
         CurrentChapter++;
-        CurrentPage = 0;
+        CurrentPage = 1;
         OnChapterChanged?.Invoke();
     }
     
@@ -89,7 +89,7 @@ public class ReaderService
     {
         if (CurrentChapter <= 0) return;
         CurrentChapter--;
-        CurrentPage = 0;
+        CurrentPage = 1;
         OnChapterChanged?.Invoke();
     }
 }

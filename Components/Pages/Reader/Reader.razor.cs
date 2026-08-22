@@ -50,8 +50,8 @@ public partial class Reader : IAsyncDisposable
     
 	private decimal Progress => _ebook != null && Current != null && _totalWeight != 0
         ? (_ebook.Content.GetTotalWeight(ReaderService.CurrentChapter) +
-           Current.WeightPerPage(ReaderService.TotalPages + 1) *
-           (ReaderService.CurrentPage + 1)) / (decimal)_totalWeight * 100
+           Current.WeightPerPage(ReaderService.TotalPages) *
+           (ReaderService.CurrentPage)) / (decimal)_totalWeight * 100
         : 0;
 
     protected override async Task OnInitializedAsync()
@@ -119,7 +119,7 @@ public partial class Reader : IAsyncDisposable
             }
             
             await LoadEbook();
-            ReaderService.NavigateTo(0, _bookProgress.Chapter);
+            ReaderService.NavigateTo(1, _bookProgress.Chapter);
         }
     }
     
@@ -202,7 +202,7 @@ public partial class Reader : IAsyncDisposable
     {
         var chapter = _ebook!.Content.Chapters.Index().FirstOrDefault(i => i.Item.Identifier == itemId);
         if(chapter.Item is null) return;
-        ReaderService.NavigateTo(0, chapter.Index);
+        ReaderService.NavigateTo(1, chapter.Index);
     }
 
     [JSInvokable("OnKeyDown")]
@@ -225,7 +225,7 @@ public partial class Reader : IAsyncDisposable
         var pagesArray = await _module.InvokeAsync<int[]>("GetPageCount");
         ReaderService.SetTotalPages(pagesArray[1], pagesArray[0], pagesArray[2]);
         
-        if(_bookLoading && ReaderService.TotalPages > -1)
+        if(_bookLoading && ReaderService.TotalPages > 0)
         {
             NavigateToInitialPage();
             _bookLoading = false;
@@ -239,9 +239,9 @@ public partial class Reader : IAsyncDisposable
 
         if (_bookProgress.ChapterProgress > 0)
         {
-            targetPage = (int)Math.Round(_bookProgress.ChapterProgress * (ReaderService.TotalPages + 1));
+            targetPage = (int)Math.Round(_bookProgress.ChapterProgress * ReaderService.TotalPages);
         }
-        targetPage = Math.Clamp(targetPage - 1, 0, ReaderService.TotalPages);
+        targetPage = Math.Clamp(targetPage, 1, ReaderService.TotalPages);
         
         _bookProgress.StartDate ??= DateTimeOffset.Now;
         ReaderService.NavigateTo(targetPage, _bookProgress.Chapter);
@@ -250,10 +250,10 @@ public partial class Reader : IAsyncDisposable
 
     private async Task SaveProgress()
     {
-        if (ReaderService.TotalPages == -1) return;
+        if (ReaderService.TotalPages == 0) return;
         
         _bookProgress.Chapter = ReaderService.CurrentChapter;
-        _bookProgress.ChapterProgress = (ReaderService.CurrentPage + 1) / (double)(ReaderService.TotalPages + 1);
+        _bookProgress.ChapterProgress = ReaderService.CurrentPage / (double)ReaderService.TotalPages;
         _bookProgress.BookWordCount = _totalWeight;
 
         if (_bookProgress.EndDate is null)

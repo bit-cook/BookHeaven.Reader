@@ -27,7 +27,7 @@ export async function GetPageCount() {
         pageNext.childElementCount > 0 ? Math.ceil(parseFloat((pageNext.scrollWidth / pageWidth).toFixed(1))) : 0
     ]);
 
-    return [pagesPrev - 1, pages - 1, pagesNext - 1];
+    return [pagesPrev, pages, pagesNext];
 }
 
 export function Dispose() {

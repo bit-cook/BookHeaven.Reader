@@ -1,7 +1,7 @@
 ﻿@implements IDisposable
 <div @ref="_containerRef" class="flex-1 flex items-center justify-center mx-2">
     <span @ref="_textRef" class="text-nowrap">@DisplayText</span>
-    <span @ref="_pageRef" class="ms-1 text-nowrap">(@(ReaderService.CurrentPage + 1) / @(ReaderService.TotalPages + 1))</span>
+    <span @ref="_pageRef" class="ms-1 text-nowrap">(@ReaderService.CurrentPage / @ReaderService.TotalPages)</span>
 </div>
 
 @code {
