@@ -57,7 +57,7 @@ public partial class Remote
         FilterBooks();
     }
 
-    private void FilterBooks()
+    private void FilterBooks(bool resetPage = true)
     {
         switch (_selectedBookStatus)
         {
@@ -82,8 +82,9 @@ public partial class Remote
         }
 
         _filteredBooks = _filteredBooks?.OrderBy(x => x.Author?.Name).ThenBy(x => x.Series?.Name).ThenBy(x => x.SeriesIndex).ToList();
+
+        _currentPage = resetPage ? 1 : Math.Clamp(_currentPage, 1, (int)Math.Ceiling(decimal.Divide(_filteredBooks?.Count() ?? 1, ItemsPerPage)));
         
-        _currentPage = 1;
     }
 
     private async Task GetDownloadedBooks()
@@ -98,7 +99,7 @@ public partial class Remote
     private void HandleBookDownloaded(Guid bookId)
     {
         _deviceBooks?.Add(bookId);
-        FilterBooks();
+        FilterBooks(false);
     }
 
     private enum BookStatus
