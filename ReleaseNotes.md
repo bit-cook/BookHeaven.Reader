@@ -1,8 +1,5 @@
-﻿# Features
-- The progress tracking has been improved to be more consistent across different devices or even after making changes to the styling on the same device.
-
-# Fixes
-- Fixed an issue where marking a book as new or finished would not update the reading progress correctly.
+﻿# Fixes
+- Fixed an issue that prevented the reading progress from being saved on chapters with a single page.
 
 # ⚠️ Breaking Changes
-- You will need to update your Server to v0.18.0 or higher to properly sync your reading progress.
+- You will need to update your Server to v0.19.0 or higher to properly sync your reading progress.
