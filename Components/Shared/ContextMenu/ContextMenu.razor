@@ -1,0 +1,88 @@
+﻿@implements IAsyncDisposable
+@if (MenuService.ActiveMenu?.IsOpen != true)
+{
+    return;
+}
+
+<div class="ctx-menu fixed bg-white border rounded z-10001 select-none overflow-hidden @MenuService.ActiveMenu.CssClass"
+    style="left: @(MenuService.ActiveMenu.AnchorX)px; top: @(MenuService.ActiveMenu.AnchorY)px;"
+    @onclick:stopPropagation="true"
+    role="menu"
+    tabindex="-1"
+    @ref="_menuRef">
+    @foreach (var item in MenuService.ActiveMenu.Items)
+    {
+        if (item.IsSeparator)
+        {
+            <ContextMenuSeparator />
+        }
+        else
+        {
+            <ContextMenuItem Model="item" OnSelect="HandleItemClick"/>
+        }
+    }
+</div>
+
+@code {
+    [Inject] private IJSRuntime JsRuntime { get; set; } = null!;
+    [Inject] private IContextMenuService MenuService { get; set; } = null!;
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    
+    private ElementReference _menuRef;
+    private IJSObjectReference? _module;
+
+    protected override void OnInitialized()
+    {
+        MenuService.OnChange += RefreshUiAsync;
+    }
+
+    private DotNetObjectReference<ContextMenu>? _dotNetRef;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _module = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./Components/Shared/ContextMenu/ContextMenu.razor.js");
+            _dotNetRef = DotNetObjectReference.Create(this);
+            await _module.InvokeVoidAsync("ctxRegisterOutsideClickHandler", _dotNetRef);
+        }
+
+        if (MenuService.ActiveMenu?.IsOpen == true && _module is not null)
+        {
+            var menu = MenuService.ActiveMenu;
+            // JS ajusta la posición final usando el tamaño real del menú y el viewport visible
+            await _module.InvokeVoidAsync("ctxPositionMenu", _menuRef, menu.AnchorX, menu.AnchorY);
+        }
+    }
+    
+    private  void RefreshUiAsync()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    [JSInvokable]
+    public void CloseMenuOnOutsideClick()
+    {
+        MenuService.CloseMenu();
+    }
+
+    private void HandleItemClick(ContextMenuItemModel item)
+    {
+        item.OnClick?.Invoke();
+        MenuService.CloseMenu();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        MenuService.OnChange -= RefreshUiAsync;
+
+        if (_module is not null)
+        {
+            await _module.InvokeVoidAsync("ctxDisposeOutsideClickHandler");
+            await _module.DisposeAsync();
+        }
+
+        _dotNetRef?.Dispose();
+    }
+}

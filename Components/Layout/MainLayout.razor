@@ -1,10 +1,12 @@
 ﻿@using BookHeaven.Core.Features.Fonts
 @using BookHeaven.Core.Features.ProfileSettingss
+@using BookHeaven.Reader.Components.Shared.ContextMenu
 @inherits LayoutComponentBase
 @foreach(var variant in _variants)
 {
     <link rel="preload" href="@variant.Url()" as="font" crossorigin="anonymous"/>
 }
+<ContextMenu />
 <StandbyWallpaper />
 <div class="flex flex-col h-screen w-screen overflow-hidden">
     <SectionOutlet SectionName="Header"/>

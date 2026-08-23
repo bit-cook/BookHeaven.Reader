@@ -1,0 +1,63 @@
+﻿<div 
+	class="ctx-item relative flex items-center gap-5 ps-2 pe-[14px] py-[7px] active:bg-neutral-300 @(Model.IsDisabled ? "text-neutral-500 pointer-events-none" : "") @(Model.CssClass)"
+	role="menuitem"
+	tabindex="0"
+	@onclick="HandleClick"
+	@oncontextmenu:preventDefault="true"
+	@onmouseenter="() => HasHover = true"
+	@onmouseleave="() => HasHover = false">
+
+	@if (Model.Icon is not null)
+	{
+		<div class="ctx-item-icon">
+			@((MarkupString)Model.Icon)
+		</div>
+	}
+
+	<span class="ctx-item-text flex-1 text-nowrap overflow-hidden text-ellipsis">@Model.Text</span>
+
+	@if (Model.SubItems.Count > 0)
+	{
+		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right">
+			<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+			<path d="M9 6l6 6l-6 6" />
+		</svg>
+	}
+
+	@if (Model.SubItems.Count > 0 && ShowSubmenu)
+	{
+		<div class="ctx-submenu" role="menu">
+			@foreach (var sub in Model.SubItems)
+			{
+				if (sub.IsSeparator)
+				{
+					<ContextMenuSeparator />
+				}
+				else
+				{
+					<ContextMenuItem Model="sub" OnSelect="() => ParentOnSelect?.InvokeAsync(sub) ?? Task.CompletedTask" />
+				}
+			}
+		</div>
+	}
+</div>
+
+@code {
+	[Parameter] public ContextMenuItemModel Model { get; set; } = null!;
+	[Parameter] public EventCallback<ContextMenuItemModel> OnSelect { get; set; }
+	[Parameter] public EventCallback<ContextMenuItemModel>? ParentOnSelect { get; set; }
+
+	private bool HasHover { get; set; }
+	private bool ShowSubmenu { get; set; }
+
+	private void HandleClick()
+	{
+		if (Model.IsDisabled) return;
+		OnSelect.InvokeAsync(Model);
+	}
+
+	private void ToggleSubmenu(bool show)
+	{
+		ShowSubmenu = show;
+	}
+}

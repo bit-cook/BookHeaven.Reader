@@ -97,15 +97,3 @@ html, body {
         padding-left: env(safe-area-inset-left);
     }
 }
-
-.blazor-context-menu__list  {
-    padding: 0 !important;
-}
-
-.blazor-context-menu__item--default {
-    @apply !p-3;
-}
-
-.blazor-context-menu__item--default:active {
-    @apply !bg-neutral-700 text-white;
-}

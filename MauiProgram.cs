@@ -3,6 +3,7 @@ using BookHeaven.Core;
 using BookHeaven.Core.Abstractions;
 using CommunityToolkit.Maui;
 using BookHeaven.EbookManager;
+using BookHeaven.Reader.Components.Shared.ContextMenu;
 using BookHeaven.Reader.WebView;
 using Microsoft.AspNetCore.Components.WebView.Maui;
 
@@ -50,11 +51,13 @@ public static class MauiProgram
 		builder.Services.AddScoped<ProfileSettingsService>();
 		builder.Services.AddScoped<ImageViewerService>();
 		builder.Services.AddScoped<OverlayService>();
+		builder.Services.AddScoped<IContextMenuService, ContextMenuService>();
 			
 		builder.Services.AddTransient<IServerService, ServerService>();
 		builder.Services.AddTransient<IAlertService, AlertService>();
 
-		builder.Services.AddBlazorContextMenu();
+		
+		
 		builder.Services.AddMauiBlazorWebView();
 		builder.Services.AddBlazorPanzoomServices();
 

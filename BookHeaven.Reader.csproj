@@ -68,7 +68,6 @@
     <None Remove="screenshots\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Blazor.ContextMenu" Version="2.1.0" />
     <PackageReference Include="BlazorPanzoom" Version="0.2.1" />
     <PackageReference Include="CommunityToolkit.Maui" Version="15.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="10.0.100" />
