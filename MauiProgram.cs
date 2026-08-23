@@ -3,6 +3,7 @@ using BookHeaven.Core;
 using BookHeaven.Core.Abstractions;
 using CommunityToolkit.Maui;
 using BookHeaven.EbookManager;
+using BookHeaven.Reader.Components.Dialogs.Books;
 using BookHeaven.Reader.Components.Shared.ContextMenu;
 using BookHeaven.Reader.WebView;
 using Microsoft.AspNetCore.Components.WebView.Maui;
@@ -46,6 +47,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<LifeCycleService>();
 		builder.Services.AddSingleton<UdpBroadcastClient>();
 		builder.Services.AddSingleton<IAppsService, AppsService>();
+		builder.Services.AddSingleton<BookInfoDialogService>();
 		
 		builder.Services.AddScoped<ReaderService>();
 		builder.Services.AddScoped<ProfileSettingsService>();
