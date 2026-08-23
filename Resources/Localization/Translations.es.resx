@@ -200,4 +200,7 @@
     <data name="LETTER_SPACING" xml:space="preserve">
         <value>Espacio entre letras</value>
     </data>
+    <data name="NOTHING_TO_SHOW" xml:space="preserve">
+        <value>No hay nada que mostrar</value>
+    </data>
 </root>

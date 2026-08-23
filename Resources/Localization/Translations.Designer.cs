@@ -447,6 +447,15 @@ namespace BookHeaven.Reader.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nothing to show.
+        /// </summary>
+        public static string NOTHING_TO_SHOW {
+            get {
+                return ResourceManager.GetString("NOTHING_TO_SHOW", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open.
         /// </summary>
         public static string OPEN {

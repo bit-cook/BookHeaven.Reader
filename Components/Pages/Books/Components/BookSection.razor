@@ -1,0 +1,169 @@
+﻿@using BookHeaven.Core.Enums
+@implements IAsyncDisposable
+
+<section class="flex flex-col h-full">
+	<div class="flex items-center h-[40px]">
+		<div class="mx-3 flex items-center">
+			<h1 class="text-lg m-0 font-bold">@SectionName</h1>
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right">
+				<path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+				<path d="M9 6l6 6l-6 6"/>
+			</svg>
+		</div>
+		@if(_visibleBooksCount < FilteredBooks.Count())
+		{
+			<div class="flex items-center ms-auto">
+				<Button Disabled="@IsPreviousDisabled" OnClick="GoToPreviousPage">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left @(IsPreviousDisabled ? "text-neutral-400" : "")">
+						<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+						<path d="M15 6l-6 6l6 6" />
+					</svg>
+				</Button>
+				<Button Disabled="@IsNextDisabled" OnClick="GoToNextPage">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right @(IsNextDisabled ? "text-neutral-400" : "")">
+						<path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+						<path d="M9 6l6 6l-6 6"/>
+					</svg>
+				</Button>
+			</div>
+		}
+	</div>
+	
+	@if (!FilteredBooks.Any())
+	{
+		<div class="relative flex-1">
+			<Message Content="@Translations.NOTHING_TO_SHOW"/>
+		</div>
+	}
+	else
+	{
+		<div id="@_sectionId" class="h-[205px] overflow-hidden">
+			<div data-book-list class="grid grid-cols-[repeat(auto-fill,120px)] justify-evenly items-center px-3 py-2 gap-2 gap-y-5 h-full">
+				@foreach (var book in FilteredBooks)
+				{
+					<BookCard Book="book"/>
+				}
+			</div>
+		</div>
+	}
+</section>
+
+@code {
+	[Inject] private IJSRuntime JsRuntime { get; set; } = null!;
+	
+	[Parameter] public required string SectionName { get; set; }
+	[Parameter] public IEnumerable<Book> Books { get; set; } = [];
+	[Parameter] public BookStatus? FilterByStatus { get; set; }
+	[Parameter] public Func<IEnumerable<Book>, IEnumerable<Book>>? OrderBy { get; set; }
+
+	private const int DefaultVisibleBooksCount = 4;
+	private readonly string _sectionId = $"book-section-{Guid.NewGuid():N}";
+	private int _visibleBooksCount = DefaultVisibleBooksCount;
+	private int _currentPage;
+	private IJSObjectReference? _module;
+	private DotNetObjectReference<BookSection> _dotNetReference = null!;
+
+	private IEnumerable<Book> FilteredBooks
+	{
+		get
+		{
+			var items = FilterByStatus.HasValue 
+				? Books.Where(b => b.ReadingStatus() == FilterByStatus.Value) 
+				: Books;
+
+			return OrderBy != null
+				? OrderBy(items)
+				: items.ApplyDefaultSorting();
+		}
+	}
+
+	private int TotalPages => Math.Max(1, (int)Math.Ceiling((double)FilteredBooks.Count() / Math.Max(1, _visibleBooksCount)));
+	private bool IsPreviousDisabled => _currentPage <= 0 || TotalPages <= 1;
+	private bool IsNextDisabled => _currentPage >= TotalPages - 1 || TotalPages <= 1;
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			_dotNetReference = DotNetObjectReference.Create(this);
+			_module = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./Components/Pages/Books/Components/BookSection.razor.js");
+			await _module.InvokeVoidAsync("initialize", _sectionId, _dotNetReference);
+			return;
+		}
+
+		if (_module is not null)
+		{
+			await _module.InvokeVoidAsync("refresh", _sectionId, _dotNetReference);
+			await _module.InvokeVoidAsync("scrollToPage", _sectionId, _currentPage, _visibleBooksCount);
+		}
+	}
+
+	[JSInvokable]
+	public void UpdateVisibleBooks(int visibleBooksCount)
+	{
+		if (visibleBooksCount <= 0)
+		{
+			visibleBooksCount = DefaultVisibleBooksCount;
+		}
+
+		var previousVisibleBooksCount = _visibleBooksCount;
+		var previousPage = _currentPage;
+		_visibleBooksCount = visibleBooksCount;
+		var maxPage = Math.Max(0, TotalPages - 1);
+		if (_currentPage > maxPage)
+		{
+			_currentPage = maxPage;
+		}
+
+		if (_visibleBooksCount == previousVisibleBooksCount && _currentPage == previousPage)
+		{
+			return;
+		}
+
+		_ = InvokeAsync(StateHasChanged);
+	}
+
+	private async Task GoToPreviousPage()
+	{
+		if (IsPreviousDisabled)
+		{
+			return;
+		}
+
+		_currentPage--;
+		await ScrollToCurrentPageAsync();
+	}
+
+	private async Task GoToNextPage()
+	{
+		if (IsNextDisabled)
+		{
+			return;
+		}
+
+		_currentPage++;
+		await ScrollToCurrentPageAsync();
+	}
+
+	private async Task ScrollToCurrentPageAsync()
+	{
+		if (_module is null)
+		{
+			return;
+		}
+
+		await _module.InvokeVoidAsync("scrollToPage", _sectionId, _currentPage, _visibleBooksCount);
+		await InvokeAsync(StateHasChanged);
+	}
+
+	public async ValueTask DisposeAsync()
+	{
+		if (_module is not null)
+		{
+			await _module.InvokeVoidAsync("dispose", _sectionId);
+			await _module.DisposeAsync();
+		}
+
+		_dotNetReference?.Dispose();
+	}
+}

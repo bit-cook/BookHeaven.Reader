@@ -1,0 +1,17 @@
+﻿@if (!Books.Any())
+{
+	<div class="h-full relative">
+		<Message Content="@Translations.BOOKS_NO_FILTER_MATCH"/>
+	</div>
+	return;
+}
+
+<div class="grid grid-cols-[repeat(auto-fill,120px)] items-center justify-evenly gap-2 p-3">
+	@foreach (var book in Books) {
+		<BookCard Book="book" />
+	}
+</div>
+
+@code {
+	[Parameter] public IEnumerable<Book> Books { get; set; } = [];
+}

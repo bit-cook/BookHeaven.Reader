@@ -1,7 +1,11 @@
 ﻿@attribute [Route(Urls.Books)]
+@using BookHeaven.Core.Abstractions
 @using BookHeaven.Core.Enums
+@using BookHeaven.Core.Services
+@using BookHeaven.Reader.Components.Dialogs.Books
 @using BookHeaven.Reader.Components.Pages.Books.Components
 @layout BooksLayout
+@implements IDisposable
 @if (!_initialized)
 {
     <Message Content="Loading your library..." />
@@ -19,73 +23,132 @@
     return;
 }
 
-<BookInfo @bind-Book="_selectedBook"></BookInfo>
-
-<ContextMenu Id="BookMenu" Context="context" OverrideDefaultCssClass="absolute rounded border bg-white">
-    @{
-        var book = (Book)context.Data;
-    }
-    <Item OnClick="@(() => _selectedBook = book)">
-        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1"  stroke-linecap="round"  stroke-linejoin="round"  class="me-2 icon icon-tabler icons-tabler-outline icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 9h.01" /><path d="M11 12h1v4h1" /></svg>
-        @Translations.INFO
-    </Item>
-    @if (book.ReadingStatus() != BookStatus.Finished)
-    {
-        <Item OnClick="@(() => BookManager.MarkAsFinishedAsync(book))">
-            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1"  stroke-linecap="round"  stroke-linejoin="round"  class="me-2 icon icon-tabler icons-tabler-outline icon-tabler-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
-            @Translations.MARK_AS_FINISHED
-        </Item>
-    }
-    @if (book.ReadingStatus() != BookStatus.New)
-    {
-        <Item OnClick="@(() => BookManager.MarkAsNewAsync(book))">
-            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1"  stroke-linecap="round"  stroke-linejoin="round"  class="me-2 icon icon-tabler icons-tabler-outline icon-tabler-restore"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3.06 13a9 9 0 1 0 .49 -4.087" /><path d="M3 4.001v5h5" /><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
-            @Translations.MARK_AS_NEW
-        </Item>
-    }
-    <Item OnClick="@(() => DeleteBook(book.BookId))">
-        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1"  stroke-linecap="round"  stroke-linejoin="round"  class="me-2 icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 -4h12l1 4" /><path d="M6 7l0 14a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l0 -14" /></svg>
-        @Translations.DELETE
-    </Item>
-</ContextMenu>
+<BookInfoDialog />
 
 <SectionContent SectionName="Filters">
-    <RadioButtonGroup Class="mx-3 my-3" @bind-SelectedOption="BookManager.Filter">
-        <RadioButton Option="@BookStatus.Reading" Count="BookManager.CountByStatus(BookStatus.Reading)" />
-        <RadioButton Option="@BookStatus.New" Count="BookManager.CountByStatus(BookStatus.New)" />
-        <RadioButton Option="@BookStatus.Finished" Count="BookManager.CountByStatus(BookStatus.Finished)" />
-        <RadioButton Option="@BookStatus.All" />
-    </RadioButtonGroup>
-</SectionContent>
-<div class="grid grid-cols-[repeat(auto-fill,120px)] justify-evenly gap-2 p-3 pt-1">
-    @if (BookManager.Books.Count == 0)
-    {
-        <Message Content="@Translations.BOOKS_NO_FILTER_MATCH"/>
-    }
-    else
-    {
-        foreach (var book in BookManager.Books) {
-            <ContextMenuTrigger CssClass="relative" MenuId="BookMenu" Data="@book">
-                <a class="flex h-full flex-col overflow-hidden rounded active:bg-neutral-200 active:outline-4 active:outline-neutral-200" href="@Urls.GetReaderUrl(book.BookId)" draggable="false">
-                    <div class="w-full overflow-hidden rounded h-[190px]">
-                        <img class="h-full w-full" src="@book.GetCoverAsBase64()" draggable="false" alt=""/>
-                        <span class="absolute font-bold -top-[1px] right-[2px] w-[40%]">
-                            <img src="/progress-badge.svg" class="w-full align-top" alt=""/>
-                            <span class="absolute inset-0 text-center text-[.6rem]">
-                                @if (book.ReadingStatus() != BookStatus.New)
-                                {
-                                    @book.Progress().Progress.ToString("0.##") @:%
-                                }
-                                else
-                                {
-                                    @Translations.NEW
-                                }
-                            </span>
-                        </span>
-                    </div>
-                    <div class="p-1 text-xs">@book.Title</div>
-                </a>
-            </ContextMenuTrigger>
+    <div class="m-2 flex items-center">
+        @if (string.IsNullOrEmpty(_filter))
+        {
+            <RadioButtonGroup @bind-SelectedOption="_currentTab">
+                <RadioButton Option="Tab.Home">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-home">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
+                        <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+                        <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+                    </svg>
+                </RadioButton>
+                <RadioButton Option="Tab.Shelf" />
+            </RadioButtonGroup>
         }
+        <div class="ms-auto">
+            <SearchBar @bind-Filter="_filter" />
+        </div>
+    </div>
+    @if(_currentTab == Tab.Shelf)
+    {
+        <div class="flex items-center justify-between">
+            <Button>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-adjustments-horizontal">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M12 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                    <path d="M4 6l8 0" />
+                    <path d="M16 6l4 0" />
+                    <path d="M6 12a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                    <path d="M4 12l2 0" />
+                    <path d="M10 12l10 0" />
+                    <path d="M15 18a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                    <path d="M4 18l11 0" />
+                    <path d="M19 18l1 0" />
+                </svg>
+            </Button>
+            <Button>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-filter-2">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M4 6h16" />
+                    <path d="M6 12h12" />
+                    <path d="M9 18h6" />
+                </svg>
+            </Button>
+        </div>
     }
-</div>
+</SectionContent>
+
+@if (string.IsNullOrEmpty(_filter))
+{
+    switch (_currentTab)
+    {
+        case Tab.Home:
+            <div class="flex h-full flex-col">
+                <div class="flex-1">
+                    <BookSection 
+                        SectionName="@BookStatus.Reading.StringValue()"
+                        Books="BookManager.Books"
+                        FilterByStatus="@BookStatus.Reading"
+                        OrderBy="books => books.OrderByDescending(b => b.Progress().LastRead)"/>
+                </div>
+                <hr class="mx-4 my-2 border-t-2 border-t-neutral-300" />
+                <div class="flex-1">
+                    <BookSection 
+                        SectionName="@BookStatus.New.StringValue()"
+                        Books="BookManager.Books"
+                        FilterByStatus="@BookStatus.New"/>
+                </div>
+            </div>
+            break;
+        case Tab.Shelf:
+            <BooksGrid Books="BookManager.Books" />
+            break;
+    }
+}
+else
+{
+    <BooksGrid Books="FilteredBooks" />
+}
+
+@code {
+    [Inject] private IAlertService AlertService { get; set; } = null!;
+    [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+    [Inject] private AppStateService AppStateService { get; set; } = null!;
+    [Inject] private BookManager BookManager { get; set; } = null!;
+    [Inject] private ISender Sender { get; set; } = null!;
+
+    private bool _initialized;
+    private Tab _currentTab = Tab.Home;
+
+    private IEnumerable<Book> FilteredBooks => 
+        string.IsNullOrEmpty(_filter) 
+            ? BookManager.Books 
+            : BookManager.Books.Where(b => 
+                b.Title?.Contains(_filter, StringComparison.OrdinalIgnoreCase) == true
+                || b.Author?.Name?.Contains(_filter, StringComparison.OrdinalIgnoreCase) == true
+                || b.Series?.Name?.Contains(_filter, StringComparison.OrdinalIgnoreCase) == true);
+    
+    private string _filter = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (AppStateService.ProfileId == Guid.Empty) return;
+        
+        BookManager.OnBooksChanged += RefreshUi;
+        
+        await BookManager.GetBooksAsync(AppStateService.ProfileId);
+        _initialized = true;
+    }
+
+    private void RefreshUi()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+    
+    public void Dispose()
+    {
+        BookManager.OnBooksChanged -= RefreshUi;
+    }
+
+    private enum Tab
+    {
+        Home,
+        Shelf
+    }
+}
