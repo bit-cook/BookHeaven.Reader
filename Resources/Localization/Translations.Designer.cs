@@ -69,6 +69,15 @@ namespace BookHeaven.Reader.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Backup Profile.
+        /// </summary>
+        public static string BACKUP_PROFILE {
+            get {
+                return ResourceManager.GetString("BACKUP_PROFILE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Books.
         /// </summary>
         public static string BOOKS {

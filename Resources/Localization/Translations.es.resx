@@ -203,4 +203,7 @@
     <data name="NOTHING_TO_SHOW" xml:space="preserve">
         <value>No hay nada que mostrar</value>
     </data>
+    <data name="BACKUP_PROFILE" xml:space="preserve">
+        <value>Respaldar Perfil</value>
+    </data>
 </root>
