@@ -5,8 +5,10 @@ namespace BookHeaven.Reader.Extensions;
 
 public static class BookExtensions
 {
-	public static string GetCachePath(this Book book, CacheKey key)
-    {
-        return Path.Combine(EbookManagerGlobals.CachePath, $"{book.BookId}-{key}.cache");
-    }
+	extension(Book book)
+	{
+		public string CachePath(CacheKey key) => Path.Combine(EbookManagerGlobals.CachePath, $"{book.BookId}-{key}.cache");
+
+		public string CoverUrlWithCustomScheme => AppImageScheme.BuildUrl(book.CoverUrl());
+	}
 }

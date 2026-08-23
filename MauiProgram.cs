@@ -3,6 +3,12 @@ using BookHeaven.Core;
 using BookHeaven.Core.Abstractions;
 using CommunityToolkit.Maui;
 using BookHeaven.EbookManager;
+using BookHeaven.Reader.WebView;
+using Microsoft.AspNetCore.Components.WebView.Maui;
+
+#if ANDROID
+using Microsoft.Maui.Hosting;
+#endif
 
 namespace BookHeaven.Reader;
 
@@ -15,6 +21,13 @@ public static class MauiProgram
 		builder
 			.UseMauiApp<App>()
 			.UseMauiCommunityToolkit();
+
+		builder.ConfigureMauiHandlers(handlers =>
+		{
+#if ANDROID || WINDOWS
+			handlers.AddHandler<BlazorWebView, CustomBlazorWebViewHandler>();
+#endif
+		});
 
 		builder.Services.AddCore(options =>
 		{
