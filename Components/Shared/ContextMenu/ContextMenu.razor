@@ -1,0 +1,64 @@
+﻿@implements IAsyncDisposable
+<CascadingValue Value="this">
+	<div class="ctx-menu fixed bg-white border rounded z-10001 select-none overflow-hidden @(CssClass) @(_isPositioned ? "visible" : "invisible")"
+		@onclick:stopPropagation="true"
+		role="menu"
+		tabindex="-1"
+		@ref="_menuRef">
+		@ChildContent
+	</div>
+</CascadingValue>
+
+@code {
+	[Inject] private IJSRuntime JsRuntime { get; set; } = null!;
+	[Inject] private IContextMenuService ContextMenuService { get; set; } = null!;
+
+	[CascadingParameter] public ContextMenuModel Model { get; set; } = null!;
+	[Parameter] public RenderFragment? ChildContent { get; set; }
+	[Parameter] public string? CssClass { get; set; }
+	
+	private ElementReference _menuRef;
+	private IJSObjectReference? _module;
+	
+	private bool _isPositioned;
+	
+	private DotNetObjectReference<ContextMenu>? _dotNetRef;
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			_module = await JsRuntime.InvokeAsync<IJSObjectReference>("import", "./Components/Shared/ContextMenu/ContextMenu.razor.js");
+			_dotNetRef = DotNetObjectReference.Create(this);
+			await _module.InvokeVoidAsync("ctxRegisterOutsideClickHandler", _dotNetRef);
+		}
+		if (_module is not null && !_isPositioned)
+		{
+			await _module.InvokeVoidAsync("ctxPositionMenu", _menuRef, Model.AnchorX, Model.AnchorY);
+			_isPositioned = true;
+			StateHasChanged();
+		}
+	}
+	
+	[JSInvokable]
+	public void CloseMenuOnOutsideClick()
+	{
+		ContextMenuService.CloseMenu();
+	}
+	
+	public void Close()
+	{
+		ContextMenuService.CloseMenu();
+	}
+	
+	public async ValueTask DisposeAsync()
+	{
+		if (_module is not null)
+		{
+			await _module.InvokeVoidAsync("ctxDisposeOutsideClickHandler");
+			await _module.DisposeAsync();
+		}
+
+		_dotNetRef?.Dispose();
+	}
+}

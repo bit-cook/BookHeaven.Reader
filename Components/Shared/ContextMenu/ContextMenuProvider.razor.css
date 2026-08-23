@@ -1,7 +1,0 @@
-﻿.ctx-menu {
-    visibility: hidden;
-}
-
-.ctx-menu.ctx-show {
-    visibility: visible;
-}

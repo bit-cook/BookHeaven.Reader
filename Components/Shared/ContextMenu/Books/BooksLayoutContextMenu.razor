@@ -1,0 +1,55 @@
+﻿@using BookHeaven.Core.Features.ProfileSettingss
+@using CommunityToolkit.Maui.Alerts
+@using CommunityToolkit.Maui.Core
+<ContextMenu 
+	CssClass="border-t-0 border-r-0 border-s border-b rounded-none border-black bg-white !top-[40px] !left-auto !right-0">
+	<ContextMenuItem OnClick="() => NavigationManager.NavigateTo(Urls.Settings)">
+		@Translations.SETTINGS
+	</ContextMenuItem>
+	<ContextMenuItem OnClick="BackupProfile">
+		@Translations.BACKUP_PROFILE
+	</ContextMenuItem>
+	<ContextMenuItem OnClick="SyncProgress">
+		@Translations.SYNC_PROGRESS
+	</ContextMenuItem>
+</ContextMenu>
+
+@code {
+	[Inject] private NavigationManager NavigationManager { get; set; } = null!;
+	[Inject] private AppStateService AppStateService { get; set; } = null!;
+	[Inject] private IServerService ServerService { get; set; } = null!;
+	[Inject] private ISender Sender { get; set; } = null!;
+	
+	private async Task<bool> CheckConnection()
+	{
+		if ((await ServerService.CanConnect()).IsFailure)
+		{
+			await Toast.Make(Translations.CONNECTION_FAILED, ToastDuration.Long).Show();
+			return false;
+		}
+
+		return true;
+	}
+
+	private async Task SyncProgress()
+	{
+		if(!await CheckConnection())
+			return;
+
+		await ServerService.UpdateProgressByProfile(AppStateService.ProfileId);
+		await Toast.Make(Translations.SYNC_COMPLETED).Show();
+	}
+
+	private async Task BackupProfile()
+	{
+		if(!await CheckConnection())
+			return;
+        
+		var getSettings = await Sender.Send(new GetProfileSettings.Query(AppStateService.ProfileId));
+		if(getSettings.IsFailure) return;
+        
+		await ServerService.UpdateProfileSettings(getSettings.Value);
+		await Toast.Make("Backup completed").Show();
+	}
+
+}

@@ -1,49 +1,50 @@
-﻿namespace BookHeaven.Reader.Components.Shared.ContextMenu;
+﻿using Microsoft.AspNetCore.Components;
+
+namespace BookHeaven.Reader.Components.Shared.ContextMenu;
 
 public interface IContextMenuService
 {
-    ContextMenuModel? ActiveMenu { get; }
-    void OpenMenu(int x, int y, List<ContextMenuItemModel> items);
-    void OpenFixedMenu(string cssClass, List<ContextMenuItemModel> items);
+    event Func<ContextMenuModel, Task>? OnShow;
+    event Action? OnClose;
+    Task ShowAsync<TComponent>(double x, double y, ContextMenuParameters? parameters = null) where TComponent : IComponent;
     void CloseMenu();
-    event Action? OnChange;
 }
 
 public class ContextMenuService : IContextMenuService
 {
-    public ContextMenuModel? ActiveMenu { get; private set; }
-
-    public event Action? OnChange;
-
-    public void OpenMenu(int x, int y, List<ContextMenuItemModel> items)
+    public event Func<ContextMenuModel, Task>? OnShow;
+    public event Action? OnClose;
+    
+    public async Task ShowAsync<TComponent>(double x, double y, ContextMenuParameters? parameters = null) where TComponent : IComponent
     {
-        ActiveMenu = new ContextMenuModel
+        var component = new RenderFragment(builder =>
         {
-            IsOpen = true,
+            builder.OpenComponent<TComponent>(0);
+            if (parameters is not null)
+            {
+                foreach (var parameter in parameters.Index())
+                {
+                    builder.AddComponentParameter(parameter.Index, parameter.Item.Key, parameter.Item.Value);
+                }
+            }
+            builder.CloseComponent();
+        });
+        
+        var model = new ContextMenuModel
+        {
             AnchorX = x,
             AnchorY = y,
-            Items = items
+            Content = component
         };
-        OnChange?.Invoke();
-    }
-    
-    public void OpenFixedMenu(string cssClass, List<ContextMenuItemModel> items)
-    {
-        ActiveMenu = new ContextMenuModel
+        
+        if (OnShow is not null)
         {
-            IsOpen = true,
-            CssClass = cssClass,
-            Items = items
-        };
-        OnChange?.Invoke();
+            await OnShow(model);
+        }
     }
 
     public void CloseMenu()
     {
-        if (ActiveMenu == null) return;
-        
-        ActiveMenu.IsOpen = false;
-        ActiveMenu = null;
-        OnChange?.Invoke();
+        OnClose?.Invoke();
     }
 }
