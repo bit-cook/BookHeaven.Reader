@@ -2,9 +2,8 @@
 
 namespace BookHeaven.Reader.Components.Shared.ContextMenu;
 
-public class ContextMenuModel
+public class ContextMenuReference
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
     public double AnchorX { get; set; }
     public double AnchorY { get; set; }
     public RenderFragment? Content { get; set; }

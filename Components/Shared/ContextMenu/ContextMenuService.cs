@@ -4,7 +4,7 @@ namespace BookHeaven.Reader.Components.Shared.ContextMenu;
 
 public interface IContextMenuService
 {
-    event Func<ContextMenuModel, Task>? OnShow;
+    event Func<ContextMenuReference, Task>? OnShow;
     event Action? OnClose;
     Task ShowAsync<TComponent>(double x, double y, ContextMenuParameters? parameters = null) where TComponent : IComponent;
     void CloseMenu();
@@ -12,7 +12,7 @@ public interface IContextMenuService
 
 public class ContextMenuService : IContextMenuService
 {
-    public event Func<ContextMenuModel, Task>? OnShow;
+    public event Func<ContextMenuReference, Task>? OnShow;
     public event Action? OnClose;
     
     public async Task ShowAsync<TComponent>(double x, double y, ContextMenuParameters? parameters = null) where TComponent : IComponent
@@ -30,7 +30,7 @@ public class ContextMenuService : IContextMenuService
             builder.CloseComponent();
         });
         
-        var model = new ContextMenuModel
+        var model = new ContextMenuReference
         {
             AnchorX = x,
             AnchorY = y,

@@ -8,7 +8,7 @@
     [Inject] private IJSRuntime JsRuntime { get; set; } = null!;
     [Inject] private IContextMenuService MenuService { get; set; } = null!;
 
-    private ContextMenuModel? _model;
+    private ContextMenuReference? _model;
 
     protected override void OnInitialized()
     {
@@ -16,9 +16,9 @@
         MenuService.OnClose += Close;
     }
 
-    private async Task Open(ContextMenuModel model)
+    private async Task Open(ContextMenuReference reference)
     {
-        _model = model;
+        _model = reference;
         await InvokeAsync(StateHasChanged);
     }
     

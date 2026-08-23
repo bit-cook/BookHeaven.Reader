@@ -13,7 +13,7 @@
 	[Inject] private IJSRuntime JsRuntime { get; set; } = null!;
 	[Inject] private IContextMenuService ContextMenuService { get; set; } = null!;
 
-	[CascadingParameter] public ContextMenuModel Model { get; set; } = null!;
+	[CascadingParameter] public ContextMenuReference Reference { get; set; } = null!;
 	[Parameter] public RenderFragment? ChildContent { get; set; }
 	[Parameter] public string? CssClass { get; set; }
 	
@@ -34,7 +34,7 @@
 		}
 		if (_module is not null && !_isPositioned)
 		{
-			await _module.InvokeVoidAsync("ctxPositionMenu", _menuRef, Model.AnchorX, Model.AnchorY);
+			await _module.InvokeVoidAsync("ctxPositionMenu", _menuRef, Reference.AnchorX, Reference.AnchorY);
 			_isPositioned = true;
 			StateHasChanged();
 		}
