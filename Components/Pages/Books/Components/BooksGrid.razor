@@ -6,8 +6,8 @@
 	return;
 }
 
-<div class="h-full py-2">
-	<div class="h-full overflow-y-auto snap-y grid grid-cols-[repeat(auto-fill,120px)] items-center justify-evenly gap-2 px-3">
+<div class="h-full overflow-y-auto snap-y scroll-p-2 py-2">
+	<div class="grid grid-cols-[repeat(auto-fill,120px)] items-center justify-evenly gap-2 px-3">
 		@foreach (var book in Books) {
 			<BookCard Book="book" Class="snap-start" />
 		}
