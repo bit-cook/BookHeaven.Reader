@@ -2,9 +2,8 @@
 @using BookHeaven.Reader.Components.Shared.ContextMenu
 @using BookHeaven.Reader.Components.Shared.ContextMenu.Books
 @using BookHeaven.Reader.Extensions
-<div class="relative pt-px @Class">
+<div data-book-card class="relative pt-px @Class">
 	<a 
-		data-book-card 
 		class="flex h-full flex-col overflow-hidden rounded active:bg-black active:outline-4 active:outline-black" 
 		href="@Urls.GetReaderUrl(Book.BookId)" 
 		draggable="false"
