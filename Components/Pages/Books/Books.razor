@@ -126,14 +126,19 @@ else
     
     private string _filter = string.Empty;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         if (AppStateService.ProfileId == Guid.Empty) return;
-        
+
         BookManager.OnBooksChanged += RefreshUi;
-        
+        _ = LoadBooksAsync();
+    }
+
+    private async Task LoadBooksAsync()
+    {
         await BookManager.GetBooksAsync(AppStateService.ProfileId);
         _initialized = true;
+        await InvokeAsync(StateHasChanged);
     }
 
     private void RefreshUi()
