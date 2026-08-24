@@ -28,6 +28,7 @@ public partial class Remote
 
     private async Task OnReconnectButtonClick()
     {
+        _canConnect = true;
         await GetData();
     }
 
@@ -84,7 +85,6 @@ public partial class Remote
         _filteredBooks = _filteredBooks?.OrderBy(x => x.Author?.Name).ThenBy(x => x.Series?.Name).ThenBy(x => x.SeriesIndex).ToList();
 
         _currentPage = resetPage ? 1 : Math.Clamp(_currentPage, 1, (int)Math.Ceiling(decimal.Divide(_filteredBooks?.Count() ?? 1, ItemsPerPage)));
-        
     }
 
     private async Task GetDownloadedBooks()
