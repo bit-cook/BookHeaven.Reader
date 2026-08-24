@@ -14,7 +14,7 @@ public partial class App : Application
 		InitializeComponent();
 		_lifeCycleService = lifeCycleService;
 
-		Task.Run(async () => await appsService.RefreshInstalledAppsAsync());
+		_ = appsService.RefreshInstalledAppsAsync();
 
 		Current!.On<Microsoft.Maui.Controls.PlatformConfiguration.Android>().UseWindowSoftInputModeAdjust(WindowSoftInputModeAdjust.Resize);
 	}
