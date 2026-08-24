@@ -23,7 +23,7 @@
     <ApplicationId>dev.ggarrido.bookheaven</ApplicationId>
     <!-- Versions -->
     <ApplicationDisplayVersion>$(GitVersion_MajorMinorPatch)</ApplicationDisplayVersion>
-    <ApplicationVersion>$(GitVersion_BuildNumber)</ApplicationVersion>
+    <ApplicationVersion>$([System.DateTimeOffset]::Now.ToUnixTimeSeconds())</ApplicationVersion>
     <!--		<WindowsPackageType>None</WindowsPackageType>-->
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
