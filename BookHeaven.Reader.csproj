@@ -22,7 +22,7 @@
     <!-- App Identifier -->
     <ApplicationId>dev.ggarrido.bookheaven</ApplicationId>
     <!-- Versions -->
-    <ApplicationDisplayVersion>$(GitVersion_MajorMinorPatch)</ApplicationDisplayVersion>
+    <ApplicationDisplayVersion>$(NBGV_BuildVersionSimple)</ApplicationDisplayVersion>
     <ApplicationVersion>$([System.DateTimeOffset]::Now.ToUnixTimeSeconds())</ApplicationVersion>
     <!--		<WindowsPackageType>None</WindowsPackageType>-->
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
@@ -72,6 +72,10 @@
     <PackageReference Include="CommunityToolkit.Maui" Version="15.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="10.0.100" />
     <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.100" />
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.10.91">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="System.Drawing.Common" Version="10.0.11" />
   </ItemGroup>
   <ItemGroup>
