@@ -45,7 +45,7 @@
             <SearchBar @bind-Filter="_filter" />
         </div>
     </div>
-    @if(_currentTab == Tab.Shelf)
+    @*@if(_currentTab == Tab.Shelf)
     {
         <div class="flex items-center justify-between">
             <Button>
@@ -71,7 +71,7 @@
                 </svg>
             </Button>
         </div>
-    }
+    }*@
 </SectionContent>
 
 @if (string.IsNullOrEmpty(_filter))
