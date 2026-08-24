@@ -25,8 +25,8 @@ public partial class App : Application
 		{
 			_window = new Window(new MainPage() { Title = "BookHeaven"});
 #if WINDOWS
-				_window.Width = 562;
-				_window.Height = 750;
+				_window.Width = 631;
+				_window.Height = 787;
 #endif
 			_window.Activated += (sender, args) => _lifeCycleService.Resumed?.Invoke();
 			_window.Deactivated += (sender, args) => _lifeCycleService.Paused?.Invoke();
