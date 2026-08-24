@@ -6,7 +6,7 @@
 @using BookHeaven.Reader.Components.Shared.ContextMenu
 @using BookHeaven.Reader.Components.Shared.ContextMenu.Books
 @using BookHeaven.Reader.Extensions
-<div class="relative">
+<div class="relative pt-px">
 	<a 
 		data-book-card 
 		class="flex h-full flex-col overflow-hidden rounded active:bg-black active:outline-4 active:outline-black" 
@@ -16,7 +16,7 @@
 		@oncontextmenu:preventDefault="true">
 		<div class="h-[190px] w-full overflow-hidden rounded">
 			<img class="h-full w-full" src="@Book.CoverUrlWithCustomScheme" draggable="false" alt=""/>
-			<span class="absolute -top-[1px] right-[2px] w-[40%] font-bold">
+			<span class="absolute top-0 right-[2px] w-[40%] font-bold">
 				<img src="/progress-badge.svg" class="w-full align-top" alt=""/>
 				<span class="absolute inset-0 text-center text-[.6rem]">
 					@if (Book.ReadingStatus() != BookStatus.New)
