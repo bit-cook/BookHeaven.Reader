@@ -528,6 +528,15 @@ namespace BookHeaven.Reader.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search books.
+        /// </summary>
+        public static string SEARCH_BOOKS {
+            get {
+                return ResourceManager.GetString("SEARCH_BOOKS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Searching for servers.
         /// </summary>
         public static string SEARCHING_SERVERS {

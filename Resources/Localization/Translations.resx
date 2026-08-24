@@ -216,4 +216,7 @@
     <data name="SHELF" xml:space="preserve">
         <value>Shelf</value>
     </data>
+    <data name="SEARCH_BOOKS" xml:space="preserve">
+        <value>Search books</value>
+    </data>
 </root>

@@ -209,4 +209,7 @@
     <data name="SHELF" xml:space="preserve">
         <value>Estantería</value>
     </data>
+    <data name="SEARCH_BOOKS" xml:space="preserve">
+        <value>Buscar libros</value>
+    </data>
 </root>
