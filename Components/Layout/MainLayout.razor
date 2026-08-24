@@ -32,14 +32,19 @@
 
     List<Font> _variants = [];
     
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
+    {
+        _ = LoadVariantsAsync();
+    }
+
+    private async Task LoadVariantsAsync()
     {
         var getProfileSettings = await Sender.Send(new GetProfileSettings.Query(AppStateService.ProfileId));
         if (getProfileSettings.IsFailure || string.IsNullOrEmpty(getProfileSettings.Value.SelectedFont))
         {
             return;
         }
-        
+
         var getFonts = await Sender.Send(new GetAllFonts.Query(getProfileSettings.Value.SelectedFont));
         if (getFonts.IsFailure)
         {
@@ -47,6 +52,7 @@
         }
 
         _variants = getFonts.Value;
+        await InvokeAsync(StateHasChanged);
     }
 
 }
