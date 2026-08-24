@@ -15,7 +15,7 @@
 		@oncontextmenu="ShowContextMenu"
 		@oncontextmenu:preventDefault="true">
 		<div class="h-[190px] w-full overflow-hidden rounded">
-			<img class="h-full w-full" src="@Book.CoverUrlWithCustomScheme" draggable="false" alt=""/>
+			<img class="h-full w-full" loading="lazy" decoding="async" src="@Book.CoverUrlWithCustomScheme" draggable="false" alt=""/>
 			<span class="absolute top-0 right-[2px] w-[40%] font-bold">
 				<img src="/progress-badge.svg" class="w-full align-top" alt=""/>
 				<span class="absolute inset-0 text-center text-[.6rem]">
