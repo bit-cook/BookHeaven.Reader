@@ -2,7 +2,7 @@
 
 namespace BookHeaven.Reader.Components.Shared.ContextMenu;
 
-public class ContextMenuParameters : IEnumerable<KeyValuePair<string, object?>>
+public partial class ContextMenuParameters : IEnumerable<KeyValuePair<string, object?>>
 {
     private readonly Dictionary<string, object?> _parameters = new();
     
