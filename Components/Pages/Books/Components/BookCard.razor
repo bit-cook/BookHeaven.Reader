@@ -6,7 +6,7 @@
 @using BookHeaven.Reader.Components.Shared.ContextMenu
 @using BookHeaven.Reader.Components.Shared.ContextMenu.Books
 @using BookHeaven.Reader.Extensions
-<div class="relative pt-px">
+<div class="relative pt-px @Class">
 	<a 
 		data-book-card 
 		class="flex h-full flex-col overflow-hidden rounded active:bg-black active:outline-4 active:outline-black" 
@@ -38,6 +38,7 @@
 	[Inject] private IContextMenuService ContextMenuService { get; set; } = null!;
 	
 	[Parameter] public required Book Book { get; set; }
+	[Parameter] public string? Class { get; set; }
 
 	private async Task ShowContextMenu(MouseEventArgs e)
 	{
