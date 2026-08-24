@@ -10,34 +10,52 @@ public static class ReaderFunctions
         switch (type)
         {
             case NavigationLayoutType.Type1:
-                buttons = [NavigationButton.Previous, NavigationButton.Overlay, NavigationButton.Next];
-                buttons.AddRange([NavigationButton.Previous, NavigationButton.Overlay, NavigationButton.Next]);
-                buttons.AddRange([NavigationButton.Previous, NavigationButton.Overlay, NavigationButton.Next]);
+                buttons =
+                [
+                    NavigationButton.Previous, NavigationButton.Overlay, NavigationButton.Next,
+                    NavigationButton.Previous, NavigationButton.Overlay, NavigationButton.Next,
+                    NavigationButton.Previous, NavigationButton.Overlay, NavigationButton.Next
+                ];
                 break;
             case NavigationLayoutType.Type2:
-                buttons = [NavigationButton.Next, NavigationButton.Overlay, NavigationButton.Next];
-                buttons.AddRange([NavigationButton.Next, NavigationButton.Overlay, NavigationButton.Next]);
-                buttons.AddRange([NavigationButton.Next, NavigationButton.Overlay, NavigationButton.Next]);
+                buttons =
+                [
+                    NavigationButton.Next, NavigationButton.Overlay, NavigationButton.Next,
+                    NavigationButton.Next, NavigationButton.Overlay, NavigationButton.Next,
+                    NavigationButton.Next, NavigationButton.Overlay, NavigationButton.Next
+                ];
                 break;
             case NavigationLayoutType.Type3:
-                buttons = [NavigationButton.Overlay, NavigationButton.Overlay, NavigationButton.Overlay];
-                buttons.AddRange([NavigationButton.Previous, NavigationButton.Overlay, NavigationButton.Next]);
-                buttons.AddRange([NavigationButton.Previous, NavigationButton.Overlay, NavigationButton.Next]);
+                buttons =
+                [
+                    NavigationButton.Overlay, NavigationButton.Overlay, NavigationButton.Overlay,
+                    NavigationButton.Previous, NavigationButton.Overlay, NavigationButton.Next,
+                    NavigationButton.Previous, NavigationButton.Overlay, NavigationButton.Next
+                ];
                 break;
             case NavigationLayoutType.Type4:
-                buttons = [NavigationButton.Previous, NavigationButton.Previous, NavigationButton.Next];
-                buttons.AddRange([NavigationButton.Previous, NavigationButton.Overlay, NavigationButton.Next]);
-                buttons.AddRange([NavigationButton.Previous, NavigationButton.Next, NavigationButton.Next]);
+                buttons =
+                [
+                    NavigationButton.Previous, NavigationButton.Previous, NavigationButton.Next,
+                    NavigationButton.Previous, NavigationButton.Overlay, NavigationButton.Next,
+                    NavigationButton.Previous, NavigationButton.Next, NavigationButton.Next
+                ];
                 break;
             case NavigationLayoutType.Type5:
-                buttons = [NavigationButton.None, NavigationButton.Overlay, NavigationButton.None];
-                buttons.AddRange([NavigationButton.None, NavigationButton.Overlay, NavigationButton.None]);
-                buttons.AddRange([NavigationButton.None, NavigationButton.Overlay, NavigationButton.None]);
+                buttons =
+                [
+                    NavigationButton.None, NavigationButton.Overlay, NavigationButton.None,
+                    NavigationButton.None, NavigationButton.Overlay, NavigationButton.None,
+                    NavigationButton.None, NavigationButton.Overlay, NavigationButton.None
+                ];
                 break;
             case NavigationLayoutType.Type6:
-                buttons = [NavigationButton.None, NavigationButton.None, NavigationButton.None];
-                buttons.AddRange([NavigationButton.None, NavigationButton.None, NavigationButton.None]);
-                buttons.AddRange([NavigationButton.None, NavigationButton.Overlay, NavigationButton.None]);
+                buttons =
+                [
+                    NavigationButton.None, NavigationButton.None, NavigationButton.None,
+                    NavigationButton.None, NavigationButton.None, NavigationButton.None,
+                    NavigationButton.None, NavigationButton.Overlay, NavigationButton.None
+                ];
                 break;
         }
 
