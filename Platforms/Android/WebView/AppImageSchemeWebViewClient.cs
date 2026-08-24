@@ -76,7 +76,7 @@ public class AppImageSchemeWebViewClient(WebViewClient? innerClient = null) : We
 
 		var contentType = GetContentType(absolutePath);
 		var fileBytes = File.ReadAllBytes(absolutePath);
-		return new WebResourceResponse(contentType, "utf-8", new MemoryStream(fileBytes));
+		return new WebResourceResponse(contentType, null, new MemoryStream(fileBytes));
 	}
 
 	private static WebResourceResponse CreateNotFoundResponse()
