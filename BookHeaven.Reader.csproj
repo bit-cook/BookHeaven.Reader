@@ -69,9 +69,9 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BlazorPanzoom" Version="0.2.1" />
-    <PackageReference Include="CommunityToolkit.Maui" Version="15.0.0" />
+    <PackageReference Include="CommunityToolkit.Maui" Version="15.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="10.0.100" />
-    <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.90" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.100" />
     <PackageReference Include="System.Drawing.Common" Version="10.0.11" />
   </ItemGroup>
   <ItemGroup>
