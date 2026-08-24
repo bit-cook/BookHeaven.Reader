@@ -213,4 +213,7 @@
     <data name="BACKUP_PROFILE" xml:space="preserve">
         <value>Backup Profile</value>
     </data>
+    <data name="SHELF" xml:space="preserve">
+        <value>Shelf</value>
+    </data>
 </root>

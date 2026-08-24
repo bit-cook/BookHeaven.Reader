@@ -206,4 +206,7 @@
     <data name="BACKUP_PROFILE" xml:space="preserve">
         <value>Respaldar Perfil</value>
     </data>
+    <data name="SHELF" xml:space="preserve">
+        <value>Estantería</value>
+    </data>
 </root>

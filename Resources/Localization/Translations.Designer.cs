@@ -573,6 +573,15 @@ namespace BookHeaven.Reader.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shelf.
+        /// </summary>
+        public static string SHELF {
+            get {
+                return ResourceManager.GetString("SHELF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start Date.
         /// </summary>
         public static string START_DATE {
