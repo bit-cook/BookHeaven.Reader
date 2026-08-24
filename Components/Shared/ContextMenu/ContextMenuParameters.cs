@@ -18,7 +18,7 @@ public partial class ContextMenuParameters : IEnumerable<KeyValuePair<string, ob
             return (T?)value;
         }
 
-        throw new KeyNotFoundException($"{parameterName} does not exist in Dialog parameters");
+        throw new KeyNotFoundException($"{parameterName} does not exist in ContextMenu parameters");
     }
     
     public T? TryGet<T>(string parameterName)
