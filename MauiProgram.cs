@@ -69,8 +69,6 @@ public static class MauiProgram
 		
 		var app = builder.Build();
 
-		app.Services.ApplyDatabaseMigrations();
-
 		using (var scope = app.Services.CreateScope())
 		{
 			var appStateService = scope.ServiceProvider.GetRequiredService<AppStateService>();
@@ -80,6 +78,8 @@ public static class MauiProgram
 				appStateService.DeviceId = Guid.NewGuid();
 			}
 		}
+		
+		app.Services.ApplyDatabaseMigrations();
 		
 		return app;
 	}
