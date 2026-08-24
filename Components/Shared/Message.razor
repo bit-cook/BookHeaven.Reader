@@ -8,13 +8,13 @@
     }
     @if (ButtonContent != null)
     {
-        <Button Class="mx-auto mt-10" Kind="Button.ButtonType.Secondary" OnClick="@(() => OnButtonClick.InvokeAsync())">@ButtonContent</Button>
+        <Button Class="mx-auto mt-10" Kind="Button.ButtonType.Secondary" OnClick="@(async () => await OnButtonClick.InvokeAsync())">@ButtonContent</Button>
     }
 </div>
 
 
 @code {
-    [Parameter] public string? Content { get; set; } = null;
+    [Parameter] public string? Content { get; set; }
     [Parameter] public RenderFragment? Description { get; set; }
     [Parameter] public RenderFragment? ButtonContent { get; set; }
 
