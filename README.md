@@ -62,31 +62,32 @@ Steps might vary for your device, but overall this is what you need to do:
 <table style="filter: grayscale(100%);">
   <tr>
     <td>
-      <img src="https://bookheaven-web.pages.dev/img/reader-img.png" alt="" />
+        <img src="https://bookheaven.ggarrido.dev/img/reader-books-home.png" alt="" />
     </td>
     <td>
-        <img src="https://bookheaven-web.pages.dev/img/reader-remote.png" alt="" />
+        <img src="https://bookheaven.ggarrido.dev/img/reader-books-shelf.png" alt="" />
     </td>
     <td>
-      <img src="https://bookheaven-web.pages.dev/img/reader-book.png" alt="" />
+<img src="https://bookheaven.ggarrido.dev/img/reader-remote.png" alt="" />
+</td>
+  </tr>
+  <tr>
+    <td>
+        <img src="https://bookheaven.ggarrido.dev/img/reader-book.png" alt="" />
+    </td>
+    <td>
+        <img src="https://bookheaven.ggarrido.dev/img/reader-index.png" alt="" />
+    </td>
+    <td>
+        <img src="https://bookheaven.ggarrido.dev/img/reader-text-settings.png" alt="" />
     </td>
   </tr>
   <tr>
     <td>
-      <img src="https://bookheaven-web.pages.dev/img/reader-index.png" alt="" />
+        <img src="https://bookheaven.ggarrido.dev/img/reader-page-settings.png" alt="" />
     </td>
     <td>
-        <img src="https://bookheaven-web.pages.dev/img/reader-text-settings.png" alt="" />
-    </td>
-    <td>
-        <img src="https://bookheaven-web.pages.dev/img/reader-page-settings.png" alt="" />
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <img src="https://bookheaven-web.pages.dev/img/reader-apps.png" alt="" />
-    </td>
-    <td>
+        <img src="https://bookheaven.ggarrido.dev/img/reader-apps.png" alt="" />
     </td>
     <td></td>
   </tr>
