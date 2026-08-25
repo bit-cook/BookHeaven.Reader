@@ -11,19 +11,22 @@
 		@oncontextmenu:preventDefault="true">
 		<div class="h-[190px] w-full overflow-hidden rounded">
 			<img class="h-full w-full" loading="lazy" decoding="async" src="@Book.CoverUrlWithCustomScheme" draggable="false" alt=""/>
-			<span class="absolute top-0 right-[2px] w-[40%] font-bold">
-				<img src="/progress-badge.svg" class="w-full align-top" alt=""/>
-				<span class="absolute inset-0 text-center text-[.6rem]">
-					@if (Book.ReadingStatus() != BookStatus.New)
-					{
-						@Book.Progress().Progress.ToString("0.##") @:%
-					}
-					else
-					{
-						@Translations.NEW
-					}
+			@if (!HideBadge)
+			{
+				<span class="absolute top-0 right-[2px] w-[40%] font-bold">
+					<img src="/progress-badge.svg" class="w-full align-top" alt=""/>
+					<span class="absolute inset-0 text-center text-[.6rem]">
+						@if (Book.ReadingStatus() != BookStatus.New)
+						{
+							@Book.Progress().Progress.ToString("0.##") @:%
+						}
+						else
+						{
+							@Translations.NEW
+						}
+					</span>
 				</span>
-			</span>
+			}
 		</div>
 		@* <div class="p-1 text-xs">@Book.Title</div> *@
 	</a>
@@ -34,6 +37,7 @@
 	
 	[Parameter] public required Book Book { get; set; }
 	[Parameter] public string? Class { get; set; }
+	[Parameter] public bool HideBadge { get; set; }
 
 	private async Task ShowContextMenu(MouseEventArgs e)
 	{

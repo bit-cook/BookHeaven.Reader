@@ -49,7 +49,7 @@
 			<div data-book-list class="grid grid-cols-[repeat(auto-fill,120px)] justify-evenly items-center px-3 py-2 gap-2 gap-y-5 h-full">
 				@foreach (var book in FilteredBooks)
 				{
-					<BookCard Book="book"/>
+					<BookCard Book="book" HideBadge="HideBadges"/>
 				}
 			</div>
 		</div>
@@ -63,6 +63,7 @@
 	[Parameter] public IEnumerable<Book> Books { get; set; } = [];
 	[Parameter] public BookStatus? FilterByStatus { get; set; }
 	[Parameter] public Func<IEnumerable<Book>, IEnumerable<Book>>? OrderBy { get; set; }
+	[Parameter] public bool HideBadges { get; set; }
 
 	private const int DefaultVisibleBooksCount = 4;
 	private readonly string _sectionId = $"book-section-{Guid.NewGuid():N}";
