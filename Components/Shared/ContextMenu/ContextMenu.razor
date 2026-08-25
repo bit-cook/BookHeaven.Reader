@@ -19,10 +19,19 @@
 	
 	private ElementReference _menuRef;
 	private IJSObjectReference? _module;
+	private ContextMenuReference? _lastReference;
 	
 	private bool _isPositioned;
 	
 	private DotNetObjectReference<ContextMenu>? _dotNetRef;
+
+	protected override void OnParametersSet()
+	{
+		if (Reference.Equals(_lastReference)) return;
+		
+		_isPositioned = false;
+		_lastReference = Reference;
+	}
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
