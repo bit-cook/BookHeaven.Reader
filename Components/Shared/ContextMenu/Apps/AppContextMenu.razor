@@ -10,7 +10,7 @@
 			<ContextMenuItem OnClick="@(() => AppsService.OpenAppShortcut(App.PackageName!, shortcut.Id!))">
 				@if(shortcut.IconBase64 is not null)
 				{
-					<img src="data:image/png;base64,@shortcut.IconBase64" alt="@shortcut.ShortLabel" draggable="false"/>
+					<img src="data:image/png;base64,@shortcut.IconBase64" class="size-6" alt="@shortcut.ShortLabel" draggable="false"/>
 				}
 				<span>@shortcut.ShortLabel</span>
 			</ContextMenuItem>
