@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: write
+  packages: read
 
 env:
   DOTNET_NOLOGO: true                     # Disable the .NET logo
@@ -66,7 +67,7 @@ jobs:
         dotnet-version: 10.x
         source-url: https://nuget.pkg.github.com/BookHeaven/index.json
       env:
-        NUGET_AUTH_TOKEN: ${{ secrets.PAT_TOKEN }}
+        NUGET_AUTH_TOKEN: ${{ secrets.GITHHUB_TOKEN }}
         
     - name: Install workload
       run: dotnet workload install maui-android
