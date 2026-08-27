@@ -67,7 +67,7 @@ jobs:
         dotnet-version: 10.x
         source-url: https://nuget.pkg.github.com/BookHeaven/index.json
       env:
-        NUGET_AUTH_TOKEN: ${{ secrets.GITHHUB_TOKEN }}
+        NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
     - name: Install workload
       run: dotnet workload install maui-android
